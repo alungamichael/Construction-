@@ -63,11 +63,12 @@ class HousingProject:
     
     def assign_design_plan(self, design_plan: DesignPlan):
         """Assign a design plan to the housing project"""
-        if design_plan.approved:
-            self.design_plan = design_plan
-            return f"Design plan {design_plan.plan_id} assigned to {self.project_name}"
-        else:
+        if not design_plan.approved:
             return "Error: Design plan must be approved first"
+        if design_plan.plan_type != 'housing':
+            return f"Error: Design plan type '{design_plan.plan_type}' is not compatible with housing projects"
+        self.design_plan = design_plan
+        return f"Design plan {design_plan.plan_id} assigned to {self.project_name}"
     
     def start_construction(self, workers: int):
         """Start the construction process"""
@@ -127,11 +128,12 @@ class RoadProject:
     
     def assign_design_plan(self, design_plan: DesignPlan):
         """Assign a design plan to the road project"""
-        if design_plan.approved:
-            self.design_plan = design_plan
-            return f"Design plan {design_plan.plan_id} assigned to {self.road_name}"
-        else:
+        if not design_plan.approved:
             return "Error: Design plan must be approved first"
+        if design_plan.plan_type != 'road':
+            return f"Error: Design plan type '{design_plan.plan_type}' is not compatible with road projects"
+        self.design_plan = design_plan
+        return f"Design plan {design_plan.plan_id} assigned to {self.road_name}"
     
     def set_road_specs(self, lanes: int, surface_type: str):
         """Set road specifications"""
