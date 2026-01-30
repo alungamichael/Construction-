@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Construction Project Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .project-header {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .project-header h2 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .project-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .info-item {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .info-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+        }
+        
+        .section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-pending {
+            background: #ffc107;
+            color: #000;
+        }
+        
+        .status-completed {
+            background: #28a745;
+            color: white;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            transition: width 0.3s ease;
+        }
+        
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #764ba2;
+        }
+        
+        .btn-success {
+            background: #28a745;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏗️ Construction Project Management</h1>
+        <p class="subtitle">Manage your construction projects efficiently</p>
+        
+        <div class="project-header">
+            <h2 id="projectName">Loading...</h2>
+            <div class="project-info">
+                <div class="info-item">
+                    <div class="info-label">Budget</div>
+                    <div class="info-value" id="budget">$0</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Status</div>
+                    <div class="info-value" id="status">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Location</div>
+                    <div class="info-value" id="location">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Total Cost</div>
+                    <div class="info-value" id="totalCost">$0</div>
+                </div>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar" style="width: 0%">0%</div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h3>📋 Tasks</h3>
+            <table id="tasksTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Task Name</th>
+                        <th>Duration (days)</th>
+                        <th>Assignee</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tasksBody">
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="section">
+            <h3>🧱 Materials</h3>
+            <table id="materialsTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Material</th>
+                        <th>Quantity</th>
+                        <th>Unit Cost</th>
+                        <th>Total Cost</th>
+                    </tr>
+                </thead>
+                <tbody id="materialsBody">
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="section">
+            <h3>👷 Workers</h3>
+            <table id="workersTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th>Hourly Rate</th>
+                        <th>Hours Worked</th>
+                        <th>Total Pay</th>
+                    </tr>
+                </thead>
+                <tbody id="workersBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script src="construction.js"></script>
+    <script>
+        // Initialize a demo project
+        const project = new ConstructionProject('Office Building Construction', '123 Main Street, Downtown', 500000);
+        
+        // Add tasks
+        project.addTask('Site Preparation', 10, 'John Doe');
+        project.addTask('Foundation', 30, 'John Doe');
+        project.addTask('Framing', 45, 'Jane Smith');
+        project.addTask('Electrical Work', 25, 'Mike Wilson');
+        project.addTask('Plumbing', 20, 'Sarah Johnson');
+        project.addTask('Roofing', 20, 'Bob Anderson');
+        project.addTask('Interior Finishing', 35, 'Jane Smith');
+        
+        // Add materials
+        project.addMaterial('Concrete (cubic yards)', 100, 150);
+        project.addMaterial('Steel Beams', 50, 500);
+        project.addMaterial('Lumber (board feet)', 5000, 3);
+        project.addMaterial('Roofing Tiles', 200, 25);
+        project.addMaterial('Electrical Wire (feet)', 1000, 2);
+        project.addMaterial('Copper Pipes (feet)', 500, 8);
+        
+        // Add workers
+        project.addWorker('John Doe', 'Foreman', 45);
+        project.addWorker('Jane Smith', 'Carpenter', 35);
+        project.addWorker('Mike Wilson', 'Electrician', 40);
+        project.addWorker('Sarah Johnson', 'Plumber', 38);
+        project.addWorker('Bob Anderson', 'Roofer', 30);
+        
+        // Simulate some work hours
+        project.workers[0].hoursWorked = 120;
+        project.workers[1].hoursWorked = 95;
+        project.workers[2].hoursWorked = 80;
+        project.workers[3].hoursWorked = 65;
+        project.workers[4].hoursWorked = 70;
+        
+        // Start the project
+        project.start();
+        
+        // Complete some tasks
+        project.completeTask(1);
+        project.completeTask(2);
+        
+        // Function to update the UI
+        function updateUI() {
+            const summary = project.getSummary();
+            
+            // Update header
+            document.getElementById('projectName').textContent = project.name;
+            document.getElementById('budget').textContent = '$' + project.budget.toLocaleString();
+            document.getElementById('status').textContent = project.status;
+            document.getElementById('location').textContent = project.location;
+            document.getElementById('totalCost').textContent = '$' + summary.totalCost.toLocaleString();
+            
+            // Update progress bar
+            const progress = project.getProgress();
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = progress + '%';
+            progressBar.textContent = progress + '%';
+            
+            // Update tasks table
+            const tasksBody = document.getElementById('tasksBody');
+            tasksBody.innerHTML = '';
+            project.tasks.forEach(task => {
+                const row = tasksBody.insertRow();
+                row.innerHTML = `
+                    <td>${task.id}</td>
+                    <td>${task.name}</td>
+                    <td>${task.duration}</td>
+                    <td>${task.assignee}</td>
+                    <td><span class="status-badge ${task.completed ? 'status-completed' : 'status-pending'}">${task.status}</span></td>
+                    <td>${!task.completed ? `<button class="btn btn-success" onclick="completeTask(${task.id})">Complete</button>` : '✓'}</td>
+                `;
+            });
+            
+            // Update materials table
+            const materialsBody = document.getElementById('materialsBody');
+            materialsBody.innerHTML = '';
+            project.materials.forEach(material => {
+                const row = materialsBody.insertRow();
+                row.innerHTML = `
+                    <td>${material.id}</td>
+                    <td>${material.name}</td>
+                    <td>${material.quantity}</td>
+                    <td>$${material.unitCost.toLocaleString()}</td>
+                    <td>$${material.totalCost.toLocaleString()}</td>
+                `;
+            });
+            
+            // Update workers table
+            const workersBody = document.getElementById('workersBody');
+            workersBody.innerHTML = '';
+            project.workers.forEach(worker => {
+                const totalPay = worker.hourlyRate * worker.hoursWorked;
+                const row = workersBody.insertRow();
+                row.innerHTML = `
+                    <td>${worker.id}</td>
+                    <td>${worker.name}</td>
+                    <td>${worker.role}</td>
+                    <td>$${worker.hourlyRate}/hr</td>
+                    <td>${worker.hoursWorked}</td>
+                    <td>$${totalPay.toLocaleString()}</td>
+                `;
+            });
+        }
+        
+        // Function to complete a task
+        function completeTask(taskId) {
+            project.completeTask(taskId);
+            updateUI();
+        }
+        
+        // Initial UI update
+        updateUI();
+        
+        // Log summary to console
+        console.log('Project Summary:', project.getSummary());
+    </script>
+</body>
+</html>
