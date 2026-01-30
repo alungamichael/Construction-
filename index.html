@@ -327,14 +327,35 @@
             tasksBody.innerHTML = '';
             project.tasks.forEach(task => {
                 const row = tasksBody.insertRow();
-                row.innerHTML = `
-                    <td>${task.id}</td>
-                    <td>${task.name}</td>
-                    <td>${task.duration}</td>
-                    <td>${task.assignee}</td>
-                    <td><span class="status-badge ${task.completed ? 'status-completed' : 'status-pending'}">${task.status}</span></td>
-                    <td>${!task.completed ? `<button class="btn btn-success" onclick="completeTask(${task.id})">Complete</button>` : '✓'}</td>
-                `;
+                
+                const idCell = row.insertCell();
+                idCell.textContent = task.id;
+                
+                const nameCell = row.insertCell();
+                nameCell.textContent = task.name;
+                
+                const durationCell = row.insertCell();
+                durationCell.textContent = task.duration;
+                
+                const assigneeCell = row.insertCell();
+                assigneeCell.textContent = task.assignee;
+                
+                const statusCell = row.insertCell();
+                const statusBadge = document.createElement('span');
+                statusBadge.className = `status-badge ${task.completed ? 'status-completed' : 'status-pending'}`;
+                statusBadge.textContent = task.status;
+                statusCell.appendChild(statusBadge);
+                
+                const actionCell = row.insertCell();
+                if (!task.completed) {
+                    const btn = document.createElement('button');
+                    btn.className = 'btn btn-success';
+                    btn.textContent = 'Complete';
+                    btn.onclick = () => completeTask(task.id);
+                    actionCell.appendChild(btn);
+                } else {
+                    actionCell.textContent = '✓';
+                }
             });
             
             // Update materials table
@@ -342,13 +363,21 @@
             materialsBody.innerHTML = '';
             project.materials.forEach(material => {
                 const row = materialsBody.insertRow();
-                row.innerHTML = `
-                    <td>${material.id}</td>
-                    <td>${material.name}</td>
-                    <td>${material.quantity}</td>
-                    <td>$${material.unitCost.toLocaleString()}</td>
-                    <td>$${material.totalCost.toLocaleString()}</td>
-                `;
+                
+                const idCell = row.insertCell();
+                idCell.textContent = material.id;
+                
+                const nameCell = row.insertCell();
+                nameCell.textContent = material.name;
+                
+                const quantityCell = row.insertCell();
+                quantityCell.textContent = material.quantity;
+                
+                const unitCostCell = row.insertCell();
+                unitCostCell.textContent = '$' + material.unitCost.toLocaleString();
+                
+                const totalCostCell = row.insertCell();
+                totalCostCell.textContent = '$' + material.totalCost.toLocaleString();
             });
             
             // Update workers table
@@ -357,14 +386,24 @@
             project.workers.forEach(worker => {
                 const totalPay = worker.hourlyRate * worker.hoursWorked;
                 const row = workersBody.insertRow();
-                row.innerHTML = `
-                    <td>${worker.id}</td>
-                    <td>${worker.name}</td>
-                    <td>${worker.role}</td>
-                    <td>$${worker.hourlyRate}/hr</td>
-                    <td>${worker.hoursWorked}</td>
-                    <td>$${totalPay.toLocaleString()}</td>
-                `;
+                
+                const idCell = row.insertCell();
+                idCell.textContent = worker.id;
+                
+                const nameCell = row.insertCell();
+                nameCell.textContent = worker.name;
+                
+                const roleCell = row.insertCell();
+                roleCell.textContent = worker.role;
+                
+                const hourlyRateCell = row.insertCell();
+                hourlyRateCell.textContent = '$' + worker.hourlyRate + '/hr';
+                
+                const hoursWorkedCell = row.insertCell();
+                hoursWorkedCell.textContent = worker.hoursWorked;
+                
+                const totalPayCell = row.insertCell();
+                totalPayCell.textContent = '$' + totalPay.toLocaleString();
             });
         }
         
